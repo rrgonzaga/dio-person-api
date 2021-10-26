@@ -31,4 +31,9 @@ public class PersonController {
     public ResponseDTO listAll() {
         return personService.listAll();
     }
+
+    @GetMapping("/{id}")
+    public ResponseDTO findById(@PathVariable Long id){
+        return personService.findById(id);
+    }
 }
