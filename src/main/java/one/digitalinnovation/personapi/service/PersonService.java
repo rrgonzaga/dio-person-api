@@ -63,10 +63,18 @@ public class PersonService {
     }
 
     public ResponseDTO findById(Long id) {
-
-        Person person = personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
+        Person person = getPerson(id);
         return ResponseDTO.builder()
                 .data(personMapper.toDTO(person))
                 .build();
+    }
+
+    public void delete(Long id) {
+        Person person = getPerson(id);
+        personRepository.delete(person);
+    }
+
+    private Person getPerson(Long id) {
+        return personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
     }
 }
