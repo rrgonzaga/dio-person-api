@@ -31,11 +31,7 @@ public class PersonService {
         Person personToSave = personMapper.toModel(personDTO);
 
         Person savedPerson = personRepository.save(personToSave);
-        return ResponseDTO
-                .builder()
-                .message("Created person with ID " + savedPerson.getId())
-                .data(savedPerson)
-                .build();
+        return createResponseDTO(savedPerson, "Created person with ID ");
     }
 
 
@@ -47,18 +43,9 @@ public class PersonService {
                     .stream()
                     .map(personMapper::toDTO)
                     .collect(Collectors.toList());
-
-            return ResponseDTO
-                    .builder()
-                    .message("Amount people: " + allPeopleDTO.size())
-                    .data(allPeopleDTO)
-                    .build();
-
+            return this.createResponseDTO("Amount people: " + allPeopleDTO.size(),allPeopleDTO);
         } else {
-            return ResponseDTO
-                    .builder()
-                    .message("Amount people: 0")
-                    .build();
+            return this.createResponseDTO("Amount people: 0",null);
         }
     }
 
@@ -72,6 +59,33 @@ public class PersonService {
     public void delete(Long id) {
         Person person = getPerson(id);
         personRepository.delete(person);
+    }    
+
+    public ResponseDTO updateById(Long id, PersonDTO personDTO) {
+
+        Person person = getPerson(id);
+
+        personDTO.setId(id);
+        Person personToSave = personMapper.toModel(personDTO);
+
+        Person updatedPerson = personRepository.save(personToSave);
+        return createResponseDTO(updatedPerson, "Updated person with ID ");
+    }
+
+    private ResponseDTO createResponseDTO(Person savedPerson, String msg) {
+        return ResponseDTO
+                .builder()
+                .message(msg + savedPerson.getId())
+                .data(savedPerson)
+                .build();
+    }
+
+    private ResponseDTO createResponseDTO(String msg, Object data) {
+        return ResponseDTO
+                .builder()
+                .message(msg)
+                .data(data)
+                .build();
     }
 
     private Person getPerson(Long id) {
