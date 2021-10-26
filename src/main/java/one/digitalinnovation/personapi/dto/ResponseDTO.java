@@ -14,7 +14,7 @@ public class ResponseDTO {
     private List<String> errors;
     private Object data;
 
-    public List<String> getErros() {
+    public List<String> getErrors() {
         if(this.errors == null) {
             this.errors = new ArrayList<>();
         }

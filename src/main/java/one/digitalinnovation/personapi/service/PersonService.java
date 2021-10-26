@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class PersonService {
 
@@ -34,4 +37,26 @@ public class PersonService {
     }
 
 
+    public ResponseDTO listAll() {
+        List<Person> allPeople = personRepository.findAll();
+
+        if(allPeople.size() > 0) {
+            List<PersonDTO> allPeopleDTO = allPeople
+                    .stream()
+                    .map(personMapper::toDTO)
+                    .collect(Collectors.toList());
+
+            return ResponseDTO
+                    .builder()
+                    .message("Amount people: " + allPeopleDTO.size())
+                    .data(allPeopleDTO)
+                    .build();
+
+        } else {
+            return ResponseDTO
+                    .builder()
+                    .message("Amount people: 0")
+                    .build();
+        }
+    }
 }

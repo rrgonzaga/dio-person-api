@@ -26,4 +26,9 @@ public class PersonController {
     public ResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO) {
         return personService.createPerson(personDTO);
     }
+
+    @GetMapping
+    public ResponseDTO listAll() {
+        return personService.listAll();
+    }
 }
